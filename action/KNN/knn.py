@@ -54,18 +54,41 @@ def cur_dir():
         return path
     elif os.path.isfile(path):
         return os.path.dirname(path)
+
+def autoNorm(dataSet):
+    minVals = dataSet.min(0)
+    maxVals = dataSet.max(0)
+    ranges = maxVals - minVals
+    normDataSet = zeros(shape(dataSet))
+    m = dataSet.shape[0]
+    normDataSet = dataSet - tile(minVals, (m, 1))
+    normDataSet = normDataSet/tile(ranges, (m, 1))
+    return normDataSet, ranges, minVals
+    
+def datingClassTest():
+    hoRatio = 0.10
+    filename = cur_dir() + "/datingTestSet.txt"
+    datingDateMat, datingLabels = file2matrix(filename2, True)
+    m = datingDateMat.shape[0]
+    numTestVecs = int(m*hoRatio)
+    errorCount = 0.0
+    for i in range(numTestVecs):
+        classifierResult = classify0()
+    
+    
         
 def main():
     # vote = classify0([0,0], group, labels, 3)
-    filename = cur_dir() + "\datingTestSet2.txt"
-    filename2 = cur_dir() + "\datingTestSet.txt"
+    filename = cur_dir() + "/datingTestSet2.txt"
     mat, vector = file2matrix(filename, False)
-    mat2, vector2 = file2matrix(filename2, True)
     fig = plt.figure()
     ax = fig.add_subplot(111)
     # ax.scatter(mat[:, 1], mat[:,2], marker = 'o')
-    ax.scatter(mat2[:, 1], mat2[:,2], 15.0*array(vector2), 15.0*array(vector2))
-    plt.show()
+    # ax.scatter(mat2[:, 1], mat2[:,2], 15.0*array(vector2), 15.0*array(vector2))
+    ax.scatter(mat[:, 0], mat[:,1], 15.0*array(vector), 15.0*array(vector))
+    a, b, c = autoNorm(mat)
+    # print(a, b, c)
+    # plt.show()
     # vote = classify0()
     
 if __name__ == "__main__":
